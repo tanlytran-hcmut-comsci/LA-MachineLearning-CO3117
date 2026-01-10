@@ -187,5 +187,5 @@ This project is for educational purposes.
 
 ## Acknowledgments
 
-- EMNIST Dataset: [Cohen et al., 2017](https://www.westernsydney.edu.au/bens/home/reproducible_research/emnist)
-- Kaggle Dataset: [crawford/emnist](https://www.kaggle.com/datasets/crawford/emnist)
+- EMNIST Dataset (CSV Style): [published in "EMNIST: Extending MNIST to handwritten letters" from Cohen et al.](https://arxiv.org/abs/1702.05373)
+- EMNIST Kaggle Dataset (Image style): [crawford/emnist](https://www.kaggle.com/datasets/crawford/emnist)
