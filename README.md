@@ -251,7 +251,7 @@ The following plots show the CNN model's training progress over epochs:
 
 Sample predictions from the CNN model on test images:
 
-<img src="cnn_predictions_grid" alt="Training Accuracy" width="500"/>
+<img src="cnn_predictions_grid.png" alt="Training Accuracy" width="750"/>
 
 ## Expected Results
 
