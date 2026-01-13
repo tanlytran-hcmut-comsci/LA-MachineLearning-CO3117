@@ -240,10 +240,10 @@ The following plots show the CNN model's training progress over epochs:
 <div align="center">
 
 #### Training Accuracy
-![Training Accuracy](training_accuracy.png)
+<img src="training_accuracy.png" alt="Training Accuracy" width="500"/>
 
 #### Training Loss
-![Training Loss](/training_loss.png)
+<img src="training_loss.png" alt="Training Accuracy" width="500"/>
 
 </div>
 
@@ -253,7 +253,7 @@ Sample predictions from the CNN model on test images:
 
 <div align="center">
 
-![CNN Prediction Grid](cnn_predictiongrid.png)
+![CNN Prediction Grid](cnn_prediction_grid.png)
 
 </div>
 
