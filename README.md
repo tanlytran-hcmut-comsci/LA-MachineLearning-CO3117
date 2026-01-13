@@ -229,9 +229,35 @@ python visualize_sample_by_label.py d -d test
 - `-n, --num_samples`: Number of random samples to show (default: 1)
 - `-d, --dataset`: Dataset to use - train, test, or both (default: both)
 
-Saves PDF to `epoch_statistic/[character]
-- Test accuracy percentage
-- **Features**: Raw pixel values with data augmentation
+Saves PDF to `epoch_statistic/[character].pdf`
+
+## Sample Results
+
+### CNN Training History
+
+The following plots show the CNN model's training progress over epochs:
+
+<div align="center">
+
+#### Training Accuracy
+![Training Accuracy](epoch_statistic/training_accuracy.png)
+
+#### Training Loss
+![Training Loss](epoch_statistic/training_loss.png)
+
+</div>
+
+### CNN Prediction Samples
+
+Sample predictions from the CNN model on test images:
+
+<div align="center">
+
+![CNN Prediction Grid](epoch_statistic/cnn_predictiongrid.png)
+
+</div>
+
+## Expected Results
 
 ### Random Forest Model
 - **Training time**: ~15-20 minutes per fold (varies with configurations)
@@ -278,7 +304,7 @@ Generate training history plots for CNN:
 python visualize.py
 ```
 
-Creates professional plots in `epoch_statistic/`:
+Creates professional plots in:
 - `training_accuracy.png` / `.pdf`
 - `training_loss.png` / `.pdf`
 
