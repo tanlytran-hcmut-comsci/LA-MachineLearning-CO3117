@@ -8,14 +8,27 @@ from datetime import datetime
 from sklearn.model_selection import GridSearchCV
 
 # --- OPTIMIZATION CONFIGURATION ---
-PARAM_GRID = {
-    'n_estimators': [100, 200],        # Number of trees
-    'max_depth': [10, 20, 30],    # How deep each tree can grow
-    'min_samples_leaf': [2, 4],          # Minimum samples allowed in a leaf
-}
+USE_HOG = True  # Use HOG features (True) or raw pixels (False)
+USE_PCA = False  # Use PCA for dimensionality reduction (True) or not (False)
+
+# PARAM_GRID = {
+#     'n_estimators': [100, 200],        # Number of trees
+#     'max_depth': [10, 20, 30],    # How deep each tree can grow
+#     'min_samples_leaf': [2, 4],          # Minimum samples allowed in a leaf
+# }
 # Total combinations: 2 * 3 * 2 = 12
 
-CV_FOLDS = 5 # 5-fold cross-validation (20/80 split per fold)
+PARAM_GRID = {
+    'n_estimators': [200],        # Number of trees
+    'max_depth': [20],    # How deep each tree can grow
+    'min_samples_leaf': [2],          # Minimum samples allowed in a leaf
+}
+
+# Add PCA parameter if enabled
+if USE_PCA:
+    PARAM_GRID['n_components'] = [50, 100, 150]  # PCA dimensions for dimensionality reduction
+
+CV_FOLDS = 5  # 5-fold cross-validation (20/80 split per fold)
 
 def main():
     # Setup directories
@@ -44,12 +57,14 @@ def main():
     for values in PARAM_GRID.values():
         total_combinations *= len(values)
     print(f"Testing ALL {total_combinations} combinations with {CV_FOLDS}-fold Cross Validation...")
+    print(f"HOG Features: {USE_HOG}")
+    print(f"PCA Enabled: {USE_PCA}")
     print("Parameter Search Space:")
     for param, values in PARAM_GRID.items():
         print(f"  {param}: {values}")
     
     # Use RandomForestOCR estimator (now sklearn-compatible!)
-    base_estimator = RandomForestOCR(n_jobs=2)
+    base_estimator = RandomForestOCR(n_jobs=2, use_hog=USE_HOG)
     
     # GridSearchCV - exhaustively tests ALL combinations
     grid_search = GridSearchCV(
@@ -75,13 +90,19 @@ def main():
     cv_results = pd.DataFrame(grid_search.cv_results_)
     
     # Extract relevant columns - parameters and average accuracy across folds
-    iterations_log = pd.DataFrame({
+    iterations_log_dict = {
         'n_estimators': cv_results['param_n_estimators'],
         'max_depth': cv_results['param_max_depth'],
         'min_samples_leaf': cv_results['param_min_samples_leaf'],
         'avg_accuracy_all_folds': cv_results['mean_test_score'] * 100,  # Convert to percentage
         'training_time_seconds': cv_results['mean_fit_time']
-    })
+    }
+    
+    # Add n_components only if PCA was used
+    if USE_PCA:
+        iterations_log_dict['n_components'] = cv_results['param_n_components']
+    
+    iterations_log = pd.DataFrame(iterations_log_dict)
     
     # Sort by accuracy (best first)
     iterations_log = iterations_log.sort_values('avg_accuracy_all_folds', ascending=False)
@@ -115,6 +136,7 @@ def main():
     print("Logging Best Model Statistics ---")
     stats = {
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'use_hog': USE_HOG,
         'best_cv_accuracy': best_cv_score,
         'optimization_time': optimization_time,
         'total_time': total_time,
@@ -135,7 +157,10 @@ def main():
     print(f"All combinations saved to: {iterations_log_path}")
     
     # Summary
-    print("TRAINING SUMMARY: ")
+    feature_desc = "HOG features" if USE_HOG else "raw pixels"
+    pca_desc = "enabled" if USE_PCA else "disabled"
+    print(f"Features:            {feature_desc}")
+    print(f"PCA:                 {pca_desc}")
     print(f"Best CV Accuracy:    {best_cv_score*100:.2f}%")
     print(f"Total Time:          {total_time/60:.2f} minutes")
     print(f"Total Combinations:  {total_combinations}")

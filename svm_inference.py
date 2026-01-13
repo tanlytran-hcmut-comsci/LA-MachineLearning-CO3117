@@ -1,4 +1,4 @@
-from rf_model import RandomForestOCR
+from svm_model import SVMOCR
 from dataset import OCRDataset
 import numpy as np
 import time
@@ -22,16 +22,17 @@ def get_emnist_char(label):
     return label_map.get(label, '?')
 
 def main():
-    model_path = "./weight/emnist_rf_model.pkl"
+    model_path = "./weight/emnist_svm_model_HOG_rbf_best.pkl"
     
     # 1. Load model
     print("Load Model ---")
     if not os.path.exists(model_path):
         print(f"Error: {model_path} not found")
+        print("Please train the model first by running: python svm_train.py")
         return
     
-    rf_model = RandomForestOCR()
-    rf_model.load_model(model_path)
+    svm_model = SVMOCR()
+    svm_model.load_model(model_path)
     
     # 2. Load test data
     print("Load Test Data ---")
@@ -44,13 +45,10 @@ def main():
     print("Run Inference ---")
     start_time = time.time()
     
-    # Predict probabilities
-    probs = rf_model.predict_proba(X_test)
+    # Predict
+    pred_classes = svm_model.predict(X_test)
     
     inference_time = time.time() - start_time
-    
-    # Convert to class predictions
-    pred_classes = np.argmax(probs, axis=1)
     
     # Convert true labels (handle one-hot encoding)
     if len(y_test.shape) > 1 and y_test.shape[1] > 1:
@@ -73,14 +71,13 @@ def main():
     # Show sample predictions
     print("\nSample Predictions (First 10):")
     print("-"*70)
-    print(f"{'True':<10} {'Predicted':<12} {'Confidence':<12} {'Status'}")
+    print(f"{'True':<10} {'Predicted':<12} {'Status'}")
     print("-"*70)
     for i in range(min(10, len(pred_classes))):
-        confidence = np.max(probs[i]) * 100
         status = "✓" if true_classes[i] == pred_classes[i] else "✗"
         true_char = get_emnist_char(true_classes[i])
         pred_char = get_emnist_char(pred_classes[i])
-        print(f"{true_char} ({true_classes[i]:<2})   {pred_char} ({pred_classes[i]:<2})      {confidence:<11.1f}%  {status}")
+        print(f"{true_char} ({true_classes[i]:<2})   {pred_char} ({pred_classes[i]:<2})      {status}")
     
     print("\nInference Complete.")
 
