@@ -17,11 +17,41 @@ A comprehensive Optical Character Recognition (OCR) system comparing CNN, Random
 
 ## Requirements
 
-Install dependencies:
+### Python Version
+- Python 3.10 or higher
+
+### Install Dependencies
+
+Install all required dependencies using the requirements file:
 
 ```bash
-pip install tensorflow numpy pandas scikit-learn matplotlib seaborn kagglehub joblib opencv-python
+pip install -r requirements.txt
 ```
+
+Or using conda:
+
+```bash
+conda create -n btl-ML python=3.10
+conda activate btl-ML
+pip install -r requirements.txt
+```
+
+<details>
+<summary>View Package List</summary>
+
+**Core packages:**
+- `tensorflow==2.20.0` - Deep learning framework
+- `numpy==2.2.6` - Numerical computing
+- `pandas==2.3.3` - Data manipulation
+- `scikit-learn==1.7.2` - Machine learning algorithms
+- `matplotlib==3.10.8` - Plotting and visualization
+- `seaborn==0.13.2` - Statistical visualization
+- `kagglehub==0.3.13` - Dataset download
+- `opencv-python>=4.8.0` - Image processing
+- `joblib==1.5.3` - Model serialization
+- `scikit-image==0.25.2` - Image processing and HOG features
+
+</details>
 
 ## Dataset Download
 
