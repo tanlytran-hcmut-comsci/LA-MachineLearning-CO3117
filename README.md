@@ -3,7 +3,7 @@
 A comprehensive Handwritten Character Recognition system comparing CNN, Random Forest, and SVM classifiers on the EMNIST Balanced dataset (47 classes: digits 0-9, uppercase A-Z, and 11 specific lowercase letters).
 
 **Performance Overview:**
-- **Our simple CNN**: ~90% test accuracy with data augmentation
+- **Our simple CNN**: ~90% test accuracy 
 - **SVM + PCA + HOG**: ~87% test accuracy  
 - **Random Forest + HOG**: ~84% test accuracy
 - **State-of-the-Art (SOTA)**: ~92% accuracy
